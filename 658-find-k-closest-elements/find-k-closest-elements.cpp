@@ -2,23 +2,29 @@ class Solution {
 public:
     vector<int> findClosestElements(vector<int>& arr, int k, int x) {
 
-        int left = 0;
-        int right = arr.size() - 1;
+        int low = 0;
+        int high = arr.size() - k;
 
-        // Remove elements until only k elements are left.
-        while (right - left + 1 > k) {
+        // Binary search on the starting index of the window.
+        while (low < high) {
 
-            // Compare which end is farther from x.
-            if (abs(arr[left] - x) > abs(arr[right] - x)) {
-                left++;
+            int mid = low + (high - low) / 2;
+
+            // Compare the element leaving the window
+            // with the element entering the next window.
+            if (x - arr[mid] > arr[mid + k] - x) {
+                // Move the window to the right.
+                low = mid + 1;
             } else {
-                right--;
+                // Keep the current window.
+                high = mid;
             }
         }
 
+        // The answer starts from index 'low'.
         vector<int> ans;
 
-        for (int i = left; i <= right; i++) {
+        for (int i = low; i < low + k; i++) {
             ans.push_back(arr[i]);
         }
 
